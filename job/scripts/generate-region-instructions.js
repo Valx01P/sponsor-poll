@@ -28,12 +28,19 @@ Find high-confidence people or organizations that may sponsor public opinion pol
 - Contacts with email, LinkedIn, contact form, phone, or another direct outreach path.
 - Useful context: political leaning when knowable, prior poll sponsorship, likely budget level, issue interests, location, website, and notes with source-aware wording.
 
+Use this JSON shape for each prospect:
+
+- Prospect fields: id, name, prospect_type, description, website_url, contact_url, location, political_leaning, sponsor_fit, sponsorship_history, prior_poll_sponsorship, estimated_budget, notes, contacts.
+- Each contact may include: name, title, email, linkedin_url, contact_url, phone, location, political_leaning, notes.
+
 ## Rules
 
 - Keep valid JSON.
 - Edit only this market partition.
 - Preserve existing prospects and contacts unless you are merging exact duplicates.
 - Prefer adding fewer verified leads over many weak guesses.
+- Write in small batches: 4 to 6 prospects for an empty market, or 3 to 5 new prospects / up to 8 outreach fixes for a non-empty market.
+- Save the partition JSON once the batch is ready, validate that it parses, then exit.
 - If a stop marker exists at \`job/swarm/sponsor-region-stop.json\`, finish the current research batch, write the JSON, and exit.
 `;
 }

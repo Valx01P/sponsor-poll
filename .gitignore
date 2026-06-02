@@ -1,19 +1,26 @@
 .DS_Store
-.env*
-!.env.example
-!client/.env.example
-!server/.env.example
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 node_modules/
 
 client/node_modules/
 client/.next/
 client/out/
-client/.env*
-!client/.env.example
+client/.env
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
 
 server/node_modules/
-server/.env*
-!server/.env.example
+server/.env
+server/.env.local
+server/.env.development.local
+server/.env.test.local
+server/.env.production.local
 
 job/regions/sponsor-*.json
 job/swarm/region-instructions/

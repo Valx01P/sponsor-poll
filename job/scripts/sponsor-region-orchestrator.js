@@ -14,6 +14,7 @@ const STOP_FILE = path.join(ROOT, "job", "swarm", "sponsor-region-stop.json");
 const LOG_DIR = path.join(ROOT, "job", "swarm", "sponsor-region-logs");
 const DEFAULT_MAX_ACTIVE = 24;
 const DEFAULT_HOURLY_AGENT_COST = Number(process.env.SPONSOR_SWARM_HOURLY_AGENT_COST || 3);
+const DEFAULT_MARKET_SCOPE = "us-mainland";
 
 function nowIso() {
   return new Date().toISOString();
@@ -36,21 +37,38 @@ function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
+function hasRegionPartitions() {
+  return fs.existsSync(REGION_DIR) && fs.readdirSync(REGION_DIR).some((file) => /^sponsor-.*\.json$/.test(file));
+}
+
+function prepareGeneratedFiles({ rebuildPartitions = false } = {}) {
+  if (rebuildPartitions || !hasRegionPartitions()) {
+    buildRegionPartitions();
+  }
+  generateRegionInstructions();
+}
+
 function parseArgs(argv) {
   const args = { _: [] };
+  const booleanFlags = new Set(["force", "no-merge", "global", "international", "all", "us-all", "us-states"]);
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (!arg.startsWith("--")) {
       args._.push(arg);
       continue;
     }
-    const key = arg.slice(2);
-    if (key === "force" || key === "no-merge") {
+    const [rawKey, inlineValue] = arg.slice(2).split(/=(.*)/s, 2);
+    const key = rawKey;
+    if (booleanFlags.has(key)) {
       args[key] = true;
       continue;
     }
-    args[key] = argv[i + 1];
-    i++;
+    if (inlineValue !== undefined) {
+      args[key] = inlineValue;
+    } else {
+      args[key] = argv[i + 1];
+      i++;
+    }
   }
   return args;
 }
@@ -75,9 +93,18 @@ function loadState() {
       active: {},
       finished: [],
       selectedMarkets: null,
+      marketScope: DEFAULT_MARKET_SCOPE,
+      targetOverride: null,
+      continuousResearch: true,
     };
   }
-  return readJson(STATE_FILE);
+  const state = readJson(STATE_FILE);
+  return {
+    ...state,
+    marketScope: state.marketScope || DEFAULT_MARKET_SCOPE,
+    targetOverride: state.targetOverride || null,
+    continuousResearch: state.continuousResearch !== false,
+  };
 }
 
 function saveState(state) {
@@ -116,12 +143,18 @@ function hasContactMethod(contact) {
   return Boolean(contact.email || contact.linkedin_url || contact.contact_url || contact.phone);
 }
 
-function metrics(market) {
+function targetFor(market, state = {}) {
+  const defaultTarget = market.priority === 1 ? 15 : market.priority === 2 ? 10 : 6;
+  const override = Number(state.targetOverride || 0);
+  return override > defaultTarget ? override : defaultTarget;
+}
+
+function metrics(market, state = {}) {
   const prospects = market.prospects || [];
   const contacts = prospects.flatMap((prospect) => prospect.contacts || []);
   const missingContactMethods = contacts.filter((contact) => !hasContactMethod(contact)).length;
   const prospectsWithoutContacts = prospects.filter((prospect) => !(prospect.contacts || []).length).length;
-  const target = market.priority === 1 ? 15 : market.priority === 2 ? 10 : 6;
+  const target = targetFor(market, state);
   const underTarget = Math.max(0, target - prospects.length);
   return {
     prospects: prospects.length,
@@ -145,8 +178,48 @@ function isAmericanMarket(market) {
   return market.country === "United States" || market.id === "US-DC" || String(market.id || "").startsWith("US-");
 }
 
+function isMainlandUsState(market) {
+  return market.country === "United States" && market.region_type === "state" && market.id !== "US-AK" && market.id !== "US-HI";
+}
+
+function isUsState(market) {
+  return market.country === "United States" && market.region_type === "state";
+}
+
+function marketInScope(market, scope = DEFAULT_MARKET_SCOPE) {
+  if (scope === "all") return true;
+  if (scope === "global") return market.region_type === "country" && market.country !== "United States";
+  if (scope === "us-all") return isAmericanMarket(market);
+  if (scope === "us-states") return isUsState(market);
+  return isMainlandUsState(market);
+}
+
+function scopeFromArgs(args) {
+  if (args.all) return "all";
+  if (args.global || args.international) return "global";
+  if (args["us-all"]) return "us-all";
+  if (args["us-states"]) return "us-states";
+  return DEFAULT_MARKET_SCOPE;
+}
+
+function scopeLabel(state) {
+  if (state.selectedMarkets?.length) return `explicit selection (${state.selectedMarkets.join(", ")})`;
+  const labels = {
+    all: "all markets",
+    global: "global country markets",
+    "us-all": "all U.S. markets",
+    "us-states": "all U.S. states",
+    "us-mainland": "mainland U.S. states",
+  };
+  return labels[state.marketScope || DEFAULT_MARKET_SCOPE] || labels[DEFAULT_MARKET_SCOPE];
+}
+
 function needsWork(summary) {
   return summary.empty || summary.missingContactMethods > 0 || summary.prospectsWithoutContacts > 0 || summary.underTarget > 0;
+}
+
+function shouldQueueRegion(summary, state) {
+  return state.continuousResearch !== false || needsWork(summary);
 }
 
 function compareRegionWork(state, a, b) {
@@ -167,14 +240,17 @@ function candidateRegions(state) {
   const selected = state.selectedMarkets ? new Set(state.selectedMarkets) : null;
   return loadRegions()
     .filter(({ market }) => !activeIds.has(market.id))
-    .filter(({ market }) => !selected || selected.has(market.id) || selected.has(slug(market.id)) || selected.has(slug(market.name)))
-    .map((entry) => ({ ...entry, summary: metrics(entry.market) }))
-    .filter((entry) => needsWork(entry.summary))
+    .filter(({ market }) => {
+      if (selected) return selected.has(market.id) || selected.has(slug(market.id)) || selected.has(slug(market.name));
+      return marketInScope(market, state.marketScope);
+    })
+    .map((entry) => ({ ...entry, summary: metrics(entry.market, state) }))
+    .filter((entry) => shouldQueueRegion(entry.summary, state))
     .sort((a, b) => compareRegionWork(state, a, b));
 }
 
-function buildPrompt(market, file, batch) {
-  const summary = metrics(market);
+function buildPrompt(market, file, batch, state) {
+  const summary = metrics(market, state);
   return `You are a sponsor-poll research worker.
 
 Read these project docs first:
@@ -190,6 +266,7 @@ Market:
 - priority ${market.priority}
 - current prospects: ${summary.prospects}
 - current contacts: ${summary.contacts}
+- target prospects: ${summary.target}
 - current batch: ${batch}
 - next work type: ${needKind(summary)}
 
@@ -206,7 +283,23 @@ Required behavior:
 - Keep valid formatted JSON. The file shape must remain { "meta": ..., "market": ... }.
 - If job/swarm/sponsor-region-stop.json exists, finish this current research batch, write the JSON, and exit.
 
-Use web search where needed. When done, save the partition JSON and stop.`;
+Schema:
+- market.prospects is an array of prospect objects.
+- Prospect fields: id, name, prospect_type, description, website_url, contact_url, location, political_leaning, sponsor_fit, sponsorship_history, prior_poll_sponsorship, estimated_budget, notes, contacts.
+- contacts is an array of objects with: name, title, email, linkedin_url, contact_url, phone, location, political_leaning, notes.
+- Use empty strings only when a field is useful but unknown; omit optional fields you do not need.
+- Do not inspect unrelated app files or other partitions looking for schema examples. Use this schema.
+
+Batch size and exit rules:
+- Do not try to finish the whole market in one run.
+- For an empty market, add 4 to 6 verified prospects, each with at least one usable outreach route: contact_url, email, linkedin_url, or phone.
+- For a non-empty market, fix up to 8 missing outreach routes or add 3 to 5 new prospects, then stop.
+- If the market is already at target and has no obvious cleanup work, do an enrichment/expansion pass: add 3 to 5 new high-fit sponsor prospects or materially improve existing prospect/contact details.
+- Search only enough to support the batch. Avoid broad exploratory repo reads after you have the JSON schema and partition.
+- Save the partition JSON as soon as the batch is ready, then run a JSON parse check on ${path.relative(ROOT, file)}.
+- If the JSON parse check passes, exit immediately.
+
+Use web search where needed. Save the partition JSON and stop.`;
 }
 
 function launchWorker(state, region) {
@@ -217,8 +310,8 @@ function launchWorker(state, region) {
   fs.mkdirSync(LOG_DIR, { recursive: true });
   const logFile = path.join(LOG_DIR, `${slug(marketId)}-batch-${batch}-${Date.now()}.log`);
   const out = fs.openSync(logFile, "a");
-  const prompt = buildPrompt(region.market, region.file, batch);
-  const child = spawn("codex", ["--search", "-a", "never", "exec", "--json", "-C", ROOT, prompt], {
+  const prompt = buildPrompt(region.market, region.file, batch, state);
+  const child = spawn("codex", ["--search", "-a", "never", "exec", "--json", "-s", "workspace-write", "-C", ROOT, prompt], {
     cwd: ROOT,
     detached: true,
     stdio: ["ignore", out, out],
@@ -259,10 +352,30 @@ function costSummary(state) {
   return { hourly, agentHours, estimatedCost: agentHours * hourly };
 }
 
-function printStatus(state) {
-  state = refreshState(state);
-  const regions = loadRegions().map((entry) => ({ ...entry, summary: metrics(entry.market) }));
-  const totals = regions.reduce(
+function elapsedLabel(startedAt) {
+  const ms = Math.max(0, Date.now() - Date.parse(startedAt));
+  const minutes = Math.floor(ms / 60000);
+  const seconds = Math.floor((ms % 60000) / 1000);
+  if (minutes >= 60) return `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, "0")}m`;
+  return `${minutes}m${String(seconds).padStart(2, "0")}s`;
+}
+
+function printRegionLine(region, state, suffix) {
+  const name = region.market.name.padEnd(22).slice(0, 22);
+  const batchCount = state.batchesByMarket?.[region.market.id] || 0;
+  console.log(
+    `${name} p${region.market.priority} prospects:${String(region.summary.prospects).padStart(3)} contacts:${String(region.summary.contacts).padStart(3)} missing:${String(region.summary.missingContactMethods).padStart(3)} under:${String(region.summary.underTarget).padStart(3)} batches:${String(batchCount).padStart(3)} next:${needKind(region.summary)}${suffix ? ` ${suffix}` : ""}`,
+  );
+}
+
+function marketMatchesStateScope(market, state) {
+  const selected = state.selectedMarkets ? new Set(state.selectedMarkets) : null;
+  if (selected) return selected.has(market.id) || selected.has(slug(market.id)) || selected.has(slug(market.name));
+  return marketInScope(market, state.marketScope);
+}
+
+function summarizeRegions(regions) {
+  return regions.reduce(
     (acc, region) => {
       acc.markets++;
       acc.prospects += region.summary.prospects;
@@ -273,20 +386,49 @@ function printStatus(state) {
     },
     { markets: 0, prospects: 0, contacts: 0, missingContactMethods: 0, underTarget: 0 },
   );
+}
+
+function printStatus(state) {
+  state = refreshState(state);
+  const regions = loadRegions().map((entry) => ({ ...entry, summary: metrics(entry.market, state) }));
+  const scopedRegions = regions.filter(({ market }) => marketMatchesStateScope(market, state));
+  const regionById = new Map(regions.map((region) => [region.market.id, region]));
+  const scopeTotals = summarizeRegions(scopedRegions);
+  const allTotals = summarizeRegions(regions);
 
   console.log("\n=== Sponsor Poll Swarm Status ===\n");
-  for (const region of regions.filter((entry) => needsWork(entry.summary)).sort((a, b) => compareRegionWork(state, a, b)).slice(0, 30)) {
-    const active = state.active?.[region.market.id];
-    const name = region.market.name.padEnd(22).slice(0, 22);
-    const batchCount = state.batchesByMarket?.[region.market.id] || 0;
-    console.log(
-      `${name} p${region.market.priority} prospects:${String(region.summary.prospects).padStart(3)} contacts:${String(region.summary.contacts).padStart(3)} missing:${String(region.summary.missingContactMethods).padStart(3)} under:${String(region.summary.underTarget).padStart(3)} alive:${active ? "yes" : "no "} batches:${String(batchCount).padStart(3)} next:${needKind(region.summary)}`,
-    );
+  console.log(`Launch scope: ${scopeLabel(state)}\n`);
+  if (state.continuousResearch !== false) console.log("Mode: continuous research until stop\n");
+  if (state.targetOverride) console.log(`Target override: at least ${state.targetOverride} prospects per market\n`);
+
+  const activeWorkers = Object.values(state.active || {}).sort((a, b) => Date.parse(a.startedAt) - Date.parse(b.startedAt));
+  if (activeWorkers.length) {
+    console.log(`Active workers (${activeWorkers.length})`);
+    for (const worker of activeWorkers.slice(0, 30)) {
+      const region = regionById.get(worker.marketId);
+      if (region) {
+        printRegionLine(region, state, `alive:yes pid:${worker.pid} running:${elapsedLabel(worker.startedAt)} log:${worker.log}`);
+      } else {
+        console.log(`${worker.marketName.padEnd(22).slice(0, 22)} alive:yes pid:${worker.pid} batch:${worker.batch} running:${elapsedLabel(worker.startedAt)} log:${worker.log}`);
+      }
+    }
+    if (activeWorkers.length > 30) console.log(`... ${activeWorkers.length - 30} more active workers`);
+    console.log("");
   }
+
+  const queue = candidateRegions(state);
+  console.log(fs.existsSync(STOP_FILE) ? "Next launch queue (paused by stop marker)" : "Next launch queue");
+  for (const region of queue.slice(0, 30)) {
+    printRegionLine(region, state, "queued");
+  }
+  if (!queue.length) console.log("No queued work in active scope.");
 
   const activeCount = Object.keys(state.active || {}).length;
   const costs = costSummary(state);
-  console.log(`\nTotals: ${totals.markets} markets | ${totals.prospects} prospects | ${totals.contacts} contacts | ${totals.missingContactMethods} contacts missing outreach route | ${totals.underTarget} prospects under target`);
+  console.log(`\nScope totals: ${scopeTotals.markets} markets | ${scopeTotals.prospects} prospects | ${scopeTotals.contacts} contacts | ${scopeTotals.missingContactMethods} contacts missing outreach route | ${scopeTotals.underTarget} prospects under target`);
+  if (scopeTotals.markets !== allTotals.markets) {
+    console.log(`All-market totals: ${allTotals.markets} markets | ${allTotals.prospects} prospects | ${allTotals.contacts} contacts | ${allTotals.missingContactMethods} contacts missing outreach route | ${allTotals.underTarget} prospects under target`);
+  }
   console.log(`Workers: ${activeCount} active | ${(state.finished || []).length} finished batches | stop requested: ${fs.existsSync(STOP_FILE) ? "yes" : "no"}`);
   console.log(`Cost estimate: ${costs.agentHours.toFixed(2)} agent-hours * $${costs.hourly.toFixed(2)}/hr = $${costs.estimatedCost.toFixed(2)}`);
 }
@@ -308,6 +450,9 @@ async function monitor(state) {
 
   if (!fs.existsSync(STOP_FILE)) {
     console.log("No remaining sponsor work detected.");
+  } else {
+    printStatus(loadState());
+    return;
   }
   mergeSponsorPartitions();
   printStatus(loadState());
@@ -346,27 +491,38 @@ async function main() {
   const args = parseArgs(rest);
   let state = loadState();
 
-  if (args["max-active"]) state.maxActive = Math.max(1, Number(args["max-active"]));
+  if (args["max-active"]) {
+    state.maxActive = Math.max(1, Number(args["max-active"]));
+  } else if (command === "start") {
+    state.maxActive = DEFAULT_MAX_ACTIVE;
+  }
   if (args["hourly-cost"]) state.hourlyAgentCost = Math.max(0, Number(args["hourly-cost"]));
-  if (args._.length) state.selectedMarkets = args._.map(slug);
+  if (args._.length) {
+    state.selectedMarkets = args._.map(slug);
+  } else if (command === "start") {
+    state.selectedMarkets = null;
+    state.marketScope = scopeFromArgs(args);
+  }
+  if (command === "start") {
+    const targetArg = args.target || args["target-min"];
+    state.targetOverride = targetArg ? Math.max(0, Number(targetArg)) : null;
+  }
 
   if (command === "init") {
     if (Object.keys(refreshState(state).active || {}).length) {
       throw new Error("Workers are active. Stop them before rebuilding partitions.");
     }
-    buildRegionPartitions();
-    generateRegionInstructions();
+    prepareGeneratedFiles({ rebuildPartitions: true });
     saveState({ ...state, startedAt: nowIso(), batchesByMarket: {}, active: {}, finished: [] });
     return;
   }
 
   if (command === "start") {
     if (fs.existsSync(STOP_FILE)) fs.unlinkSync(STOP_FILE);
-    buildRegionPartitions();
-    generateRegionInstructions();
+    prepareGeneratedFiles();
     state.startedAt = nowIso();
-    launchAvailable(state);
-    printStatus(state);
+    saveState(state);
+    await monitor(state);
     return;
   }
 

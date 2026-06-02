@@ -39,8 +39,48 @@ const keyPart = (value?: string) =>
     .trim()
     .replace(/\s+/g, "-");
 
-const contactKey = (marketId: string, prospect: SponsorProspect, contact: SponsorContact, index: number) =>
+const firstKeyPart = (...values: Array<string | undefined>) => values.map(keyPart).find(Boolean) || "";
+const prospectKeyPart = (prospect: SponsorProspect) => firstKeyPart(prospect.id, prospect.name);
+const contactIdentityPart = (contact: SponsorContact, index: number) =>
+  firstKeyPart(
+    contact.email,
+    contact.linkedin_url,
+    contact.contact_url,
+    contact.phone,
+    `${contact.name || ""}-${contact.title || ""}-${contact.location || ""}`,
+    String(index),
+  );
+
+const legacyContactKey = (marketId: string, prospect: SponsorProspect, contact: SponsorContact, index: number) =>
   `${marketId}#${keyPart(prospect.name)}#${keyPart(contact.name) || index}`;
+
+const contactKey = (marketId: string, prospect: SponsorProspect, contact: SponsorContact, index: number) =>
+  `${marketId}#${prospectKeyPart(prospect)}#${contactIdentityPart(contact, index)}`;
+
+function migrateContactedKeys(saved: Set<string>) {
+  const next = new Set(saved);
+  let changed = false;
+
+  for (const market of allMarkets) {
+    let index = 0;
+    for (const prospect of market.prospects || []) {
+      for (const contact of prospect.contacts || []) {
+        const legacy = legacyContactKey(market.id, prospect, contact, index);
+        const current = contactKey(market.id, prospect, contact, index);
+        index++;
+        if (legacy === current || !next.has(legacy)) continue;
+        next.add(current);
+        next.delete(legacy);
+        changed = true;
+      }
+    }
+  }
+
+  return { keys: next, changed };
+}
+
+const prospectRenderKey = (marketId: string, prospect: SponsorProspect, index: number) =>
+  `${marketId}#${prospectKeyPart(prospect) || index}`;
 
 const prospectCount = (market: SponsorMarket) => market.prospects?.length || 0;
 const contactCount = (market: SponsorMarket) =>
@@ -58,6 +98,7 @@ export default function SponsorPollDirectory() {
   const [expandedMarkets, setExpandedMarkets] = useState<Set<string>>(new Set());
   const [view, setView] = useState<ViewMode>("compact");
   const [contacted, setContacted] = useState<Set<string>>(new Set());
+  const [activeContactKey, setActiveContactKey] = useState<string | null>(null);
   const contactedRef = useRef(contacted);
 
   useEffect(() => {
@@ -70,7 +111,11 @@ export default function SponsorPollDirectory() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(CONTACTED_KEY);
-      if (raw) setContacted(new Set(JSON.parse(raw)));
+      if (raw) {
+        const migrated = migrateContactedKeys(new Set(JSON.parse(raw)));
+        setContacted(migrated.keys);
+        if (migrated.changed) localStorage.setItem(CONTACTED_KEY, JSON.stringify([...migrated.keys]));
+      }
     } catch {}
   }, []);
 
@@ -284,7 +329,18 @@ export default function SponsorPollDirectory() {
     setOutreachFilter("all");
     setHideContacted(false);
     setExpandedMarkets(new Set());
+    setActiveContactKey(null);
   };
+
+  const toggleMarket = useCallback((id: string) => {
+    setActiveContactKey(null);
+    setExpandedMarkets((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
 
   const changeView = (next: ViewMode) => {
     setView(next);
@@ -493,6 +549,12 @@ export default function SponsorPollDirectory() {
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden sm:inline text-xs text-zinc-500">{visibleProspects} prospects / {visibleContacts} contacts visible</span>
+            <button onClick={() => { setActiveContactKey(null); setExpandedMarkets(new Set(visibleMarkets.map((market) => market.id))); }} className="hidden sm:inline-flex h-7 items-center rounded-full border border-zinc-200 dark:border-zinc-800 px-3 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+              Expand visible
+            </button>
+            <button onClick={() => { setActiveContactKey(null); setExpandedMarkets(new Set()); }} className="hidden sm:inline-flex h-7 items-center rounded-full border border-zinc-200 dark:border-zinc-800 px-3 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+              Collapse all
+            </button>
             <div className="inline-flex rounded-full border border-zinc-200 dark:border-zinc-800 p-0.5 text-xs font-medium">
               <button onClick={() => changeView("cards")} className={`px-3 h-7 rounded-full ${view === "cards" ? "bg-zinc-900 text-white dark:bg-white dark:text-black" : "text-zinc-500"}`}>Cards</button>
               <button onClick={() => changeView("compact")} className={`px-3 h-7 rounded-full ${view === "compact" ? "bg-zinc-900 text-white dark:bg-white dark:text-black" : "text-zinc-500"}`}>Compact</button>
@@ -531,11 +593,11 @@ export default function SponsorPollDirectory() {
                         />
                       </label>
                     </div>
-                    <div className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden">
+                    <div className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-visible">
                       {shownSuggestions.map(({ market, similarity }) => (
                         <div key={market.id} className="relative">
                           <span className="absolute right-3 top-2 z-10 text-[10px] font-mono text-zinc-400">{Math.round(similarity * 100)}%</span>
-                          <CompactRow market={market} status={rollup.get(market.id)!} contacted={contacted} hideContacted={hideContacted} onToggle={toggleContact} onMark={markContacted} onOpen={open} />
+                          <CompactRow market={market} status={rollup.get(market.id)!} contacted={contacted} hideContacted={hideContacted} expanded={expandedMarkets.has(market.id)} activeContactKey={activeContactKey} onShowContact={setActiveContactKey} onCloseContact={() => setActiveContactKey(null)} onToggleMarket={toggleMarket} onToggle={toggleContact} onMark={markContacted} onCopy={copy} onOpen={open} />
                         </div>
                       ))}
                     </div>
@@ -557,9 +619,9 @@ export default function SponsorPollDirectory() {
 
         {filteredMarkets.length > 0 && (
           view === "compact" ? (
-            <div ref={listRef} className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden">
+            <div ref={listRef} className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-visible">
               {visibleMarkets.map((market) => (
-                <CompactRow key={market.id} market={market} status={rollup.get(market.id)!} contacted={contacted} hideContacted={hideContacted} onToggle={toggleContact} onMark={markContacted} onOpen={open} />
+                <CompactRow key={market.id} market={market} status={rollup.get(market.id)!} contacted={contacted} hideContacted={hideContacted} expanded={expandedMarkets.has(market.id)} activeContactKey={activeContactKey} onShowContact={setActiveContactKey} onCloseContact={() => setActiveContactKey(null)} onToggleMarket={toggleMarket} onToggle={toggleContact} onMark={markContacted} onCopy={copy} onOpen={open} />
               ))}
             </div>
           ) : (
@@ -572,14 +634,10 @@ export default function SponsorPollDirectory() {
                   contacted={contacted}
                   hideContacted={hideContacted}
                   expanded={expandedMarkets.has(market.id)}
-                  onToggleMarket={(id) =>
-                    setExpandedMarkets((prev) => {
-                      const next = new Set(prev);
-                      if (next.has(id)) next.delete(id);
-                      else next.add(id);
-                      return next;
-                    })
-                  }
+                  activeContactKey={activeContactKey}
+                  onShowContact={setActiveContactKey}
+                  onCloseContact={() => setActiveContactKey(null)}
+                  onToggleMarket={toggleMarket}
                   onToggle={toggleContact}
                   onMark={markContacted}
                   onCopy={copy}
@@ -641,62 +699,10 @@ function CompactRow({
   status,
   contacted,
   hideContacted,
-  onToggle,
-  onMark,
-  onOpen,
-}: {
-  market: SponsorMarket;
-  status: { contacted: number; total: number };
-  contacted: Set<string>;
-  hideContacted: boolean;
-  onToggle: (key: string) => void;
-  onMark: (key: string) => void;
-  onOpen: (url?: string) => void;
-}) {
-  const rows = flattenContacts(market).filter(({ prospect, contact, index }) => !hideContacted || !contacted.has(contactKey(market.id, prospect, contact, index)));
-  return (
-    <div className="sp-row px-3 py-1.5 bg-white dark:bg-zinc-900">
-      <div className="flex items-center gap-2 min-w-0">
-        <span className={`badge priority-${market.priority}`}>P{market.priority}</span>
-        <button onClick={() => onOpen(market.sponsor_search_url)} className="font-semibold text-sm truncate hover:underline inline-flex items-center gap-1" title={market.description}>
-          {market.name}
-          <ExternalLink className="h-3 w-3 opacity-50 shrink-0" />
-        </button>
-        <span className="text-[11px] text-zinc-400 shrink-0">{market.region_type} / {market.region}</span>
-        <span className="text-[10px] text-zinc-400 shrink-0">{prospectCount(market)} prospects</span>
-        <span className="text-[10px] text-zinc-400 shrink-0">{status.contacted}/{status.total}</span>
-      </div>
-      {rows.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-0.5 pl-8 text-xs">
-          {rows.map(({ prospect, contact, index }) => {
-            const key = contactKey(market.id, prospect, contact, index);
-            const on = contacted.has(key);
-            const href = contact.linkedin_url || contact.contact_url || prospect.contact_url || prospect.website_url;
-            return (
-              <span key={key} className="inline-flex items-center gap-1 min-w-0">
-                <ContactCheckbox checked={on} onChange={() => onToggle(key)} title={on ? "Contacted - click to undo" : "Mark contacted"} size={13} />
-                <a href={href || undefined} target="_blank" rel="noopener noreferrer" onClick={() => href && onMark(key)} className={`inline-flex items-center gap-0.5 hover:underline truncate ${on ? "text-emerald-600 dark:text-emerald-400" : "text-zinc-700 dark:text-zinc-300"}`} title={`${contact.name} - ${contact.title}`}>
-                  {contact.name || prospect.name}
-                  <ExternalLink className="h-3 w-3 opacity-50 shrink-0" />
-                </a>
-                <span className="text-zinc-400">{prospect.name}</span>
-              </span>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="pl-8 mt-0.5 text-xs text-zinc-400">No contacts yet. Use the search link or swarm workflow to populate sponsor leads.</div>
-      )}
-    </div>
-  );
-}
-
-function MarketCard({
-  market,
-  status,
-  contacted,
-  hideContacted,
   expanded,
+  activeContactKey,
+  onShowContact,
+  onCloseContact,
   onToggleMarket,
   onToggle,
   onMark,
@@ -708,15 +714,266 @@ function MarketCard({
   contacted: Set<string>;
   hideContacted: boolean;
   expanded: boolean;
+  activeContactKey: string | null;
+  onShowContact: (key: string | null) => void;
+  onCloseContact: () => void;
   onToggleMarket: (id: string) => void;
   onToggle: (key: string) => void;
   onMark: (key: string) => void;
   onCopy: (text: string, label: string) => void;
   onOpen: (url?: string) => void;
 }) {
-  const prospects = expanded ? market.prospects : (market.prospects || []).slice(0, 3);
+  const rows = flattenContacts(market).filter(({ prospect, contact, index }) => !hideContacted || !contacted.has(contactKey(market.id, prospect, contact, index)));
   return (
-    <div className="sp-row border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-white dark:bg-zinc-900 overflow-hidden">
+    <div className="sp-row px-3 py-1.5 bg-white dark:bg-zinc-900">
+      <div className="flex items-center gap-2 min-w-0">
+        <button onClick={() => onToggleMarket(market.id)} aria-label={expanded ? `Collapse ${market.name}` : `Expand ${market.name}`} className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded border border-zinc-200 dark:border-zinc-800 text-zinc-500">
+          {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+        </button>
+        <span className={`badge priority-${market.priority}`}>P{market.priority}</span>
+        <button onClick={() => onOpen(market.sponsor_search_url)} className="font-semibold text-sm truncate hover:underline inline-flex items-center gap-1" title={market.description}>
+          {market.name}
+          <ExternalLink className="h-3 w-3 opacity-50 shrink-0" />
+        </button>
+        <span className="text-[11px] text-zinc-400 shrink-0">{market.region_type} / {market.region}</span>
+        <span className="text-[10px] text-zinc-400 shrink-0">{prospectCount(market)} prospects</span>
+        <span className="text-[10px] text-zinc-400 shrink-0">{status.contacted}/{status.total}</span>
+      </div>
+      {expanded && (rows.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 pl-8 text-xs">
+          {rows.map(({ prospect, contact, index }) => {
+            const key = contactKey(market.id, prospect, contact, index);
+            const on = contacted.has(key);
+            return (
+              <ContactChip
+                key={key}
+                market={market}
+                prospect={prospect}
+                contact={contact}
+                contactKeyValue={key}
+                contacted={on}
+                open={activeContactKey === key}
+                showProspectName
+                onToggle={() => onToggle(key)}
+                onOpenDetails={() => onShowContact(activeContactKey === key ? null : key)}
+                onClose={onCloseContact}
+                onMark={() => onMark(key)}
+                onCopy={onCopy}
+                onOpenUrl={onOpen}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div className="pl-8 mt-0.5 text-xs text-zinc-400">No contacts yet. Use the search link or swarm workflow to populate sponsor leads.</div>
+      ))}
+    </div>
+  );
+}
+
+function DetailLine({ label, value }: { label: string; value?: string }) {
+  if (!String(value || "").trim()) return null;
+  return (
+    <div className="grid grid-cols-[5rem_minmax(0,1fr)] gap-2">
+      <span className="text-zinc-400">{label}</span>
+      <span className="min-w-0 whitespace-normal break-words [overflow-wrap:anywhere] text-zinc-700 dark:text-zinc-200">{value}</span>
+    </div>
+  );
+}
+
+function RouteButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button onClick={onClick} className="inline-flex items-center gap-1 rounded border border-zinc-200 dark:border-zinc-800 px-2 h-7 text-[11px] font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800">
+      {label}
+      <ExternalLink className="h-3 w-3 opacity-60" />
+    </button>
+  );
+}
+
+function ContactDetailPopover({
+  market,
+  prospect,
+  contact,
+  onClose,
+  onMark,
+  onCopy,
+  onOpenUrl,
+}: {
+  market: SponsorMarket;
+  prospect: SponsorProspect;
+  contact: SponsorContact;
+  onClose: () => void;
+  onMark: () => void;
+  onCopy: (text: string, label: string) => void;
+  onOpenUrl: (url?: string) => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const politicalStanding = contact.political_leaning || prospect.political_leaning;
+
+  useEffect(() => {
+    const closeIfOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !ref.current?.contains(event.target)) onClose();
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("pointerdown", closeIfOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeIfOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [onClose]);
+
+  const openAndMark = (url?: string) => {
+    if (!url) return;
+    onMark();
+    onOpenUrl(url);
+  };
+
+  return (
+    <div ref={ref} className="absolute left-0 top-full z-50 mt-1 w-[34rem] max-w-[calc(100vw-2rem)] max-h-[min(34rem,calc(100vh-8rem))] overflow-y-auto overflow-x-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-xl p-3 text-left text-xs text-zinc-600 dark:text-zinc-300">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="font-semibold text-sm text-zinc-950 dark:text-zinc-50 truncate">{contact.name || prospect.name}</div>
+          <div className="text-[11px] text-zinc-500 truncate">{contact.title || prospect.prospect_type}</div>
+        </div>
+        <button onClick={onClose} aria-label="Close contact details" className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">
+          <X className="h-3.5 w-3.5" />
+        </button>
+      </div>
+
+      <div className="mt-2 space-y-1">
+        <DetailLine label="Market" value={market.name} />
+        <DetailLine label="Prospect" value={prospect.name} />
+        <DetailLine label="Type" value={prospect.prospect_type} />
+        <DetailLine label="Standing" value={politicalStanding} />
+        <DetailLine label="Location" value={contact.location || prospect.location} />
+        <DetailLine label="Phone" value={contact.phone} />
+        <DetailLine label="Email" value={contact.email} />
+        <DetailLine label="LinkedIn" value={contact.linkedin_url} />
+        <DetailLine label="URL" value={contact.contact_url || prospect.contact_url || prospect.website_url} />
+      </div>
+
+      {(prospect.description || prospect.sponsor_fit || prospect.estimated_budget || prospect.sponsorship_history || contact.notes || prospect.notes) && (
+        <div className="mt-3 space-y-1.5 border-t border-zinc-100 dark:border-zinc-800 pt-2">
+          <DetailLine label="Budget" value={prospect.estimated_budget} />
+          <DetailLine label="Fit" value={prospect.sponsor_fit} />
+          <DetailLine label="History" value={prospect.sponsorship_history || prospect.prior_poll_sponsorship} />
+          <DetailLine label="Notes" value={contact.notes || prospect.notes} />
+          <DetailLine label="About" value={prospect.description} />
+        </div>
+      )}
+
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {contact.email && (
+          <button onClick={() => { onCopy(contact.email || "", "email"); onMark(); }} className="inline-flex items-center gap-1 rounded border border-zinc-200 dark:border-zinc-800 px-2 h-7 text-[11px] font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800">
+            Copy email
+            <Copy className="h-3 w-3 opacity-60" />
+          </button>
+        )}
+        {contact.phone && <RouteButton label="Call" onClick={() => openAndMark(`tel:${contact.phone}`)} />}
+        {contact.linkedin_url && <RouteButton label="LinkedIn" onClick={() => openAndMark(contact.linkedin_url)} />}
+        {contact.contact_url && <RouteButton label="Contact URL" onClick={() => openAndMark(contact.contact_url)} />}
+        {!contact.contact_url && prospect.contact_url && <RouteButton label="Prospect URL" onClick={() => openAndMark(prospect.contact_url)} />}
+        {prospect.website_url && <RouteButton label="Website" onClick={() => openAndMark(prospect.website_url)} />}
+      </div>
+    </div>
+  );
+}
+
+function ContactChip({
+  market,
+  prospect,
+  contact,
+  contactKeyValue,
+  contacted,
+  open,
+  showProspectName = false,
+  onToggle,
+  onOpenDetails,
+  onClose,
+  onMark,
+  onCopy,
+  onOpenUrl,
+}: {
+  market: SponsorMarket;
+  prospect: SponsorProspect;
+  contact: SponsorContact;
+  contactKeyValue: string;
+  contacted: boolean;
+  open: boolean;
+  showProspectName?: boolean;
+  onToggle: () => void;
+  onOpenDetails: () => void;
+  onClose: () => void;
+  onMark: () => void;
+  onCopy: (text: string, label: string) => void;
+  onOpenUrl: (url?: string) => void;
+}) {
+  return (
+    <span className="relative inline-flex items-center gap-1 min-w-0">
+      <ContactCheckbox checked={contacted} onChange={onToggle} title={contacted ? "Contacted - click to undo" : "Mark contacted"} size={13} />
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={`detail-${keyPart(contactKeyValue)}`}
+        onClick={onOpenDetails}
+        className={`inline-flex items-center gap-0.5 hover:underline truncate text-left ${contacted ? "text-emerald-600 dark:text-emerald-400" : "text-zinc-700 dark:text-zinc-300"}`}
+        title={`${contact.name || prospect.name} - ${contact.title || prospect.prospect_type}`}
+      >
+        {contact.name || prospect.name}
+        <ChevronDown className={`h-3 w-3 opacity-50 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {showProspectName && <span className="text-zinc-400">{prospect.name}</span>}
+      {!showProspectName && contact.title && <span className="text-zinc-400">{contact.title}</span>}
+      {open && (
+        <ContactDetailPopover
+          market={market}
+          prospect={prospect}
+          contact={contact}
+          onClose={onClose}
+          onMark={onMark}
+          onCopy={onCopy}
+          onOpenUrl={onOpenUrl}
+        />
+      )}
+    </span>
+  );
+}
+
+function MarketCard({
+  market,
+  status,
+  contacted,
+  hideContacted,
+  expanded,
+  activeContactKey,
+  onShowContact,
+  onCloseContact,
+  onToggleMarket,
+  onToggle,
+  onMark,
+  onCopy,
+  onOpen,
+}: {
+  market: SponsorMarket;
+  status: { contacted: number; total: number };
+  contacted: Set<string>;
+  hideContacted: boolean;
+  expanded: boolean;
+  activeContactKey: string | null;
+  onShowContact: (key: string | null) => void;
+  onCloseContact: () => void;
+  onToggleMarket: (id: string) => void;
+  onToggle: (key: string) => void;
+  onMark: (key: string) => void;
+  onCopy: (text: string, label: string) => void;
+  onOpen: (url?: string) => void;
+}) {
+  const prospects = expanded ? market.prospects || [] : [];
+  return (
+    <div className="sp-row border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-white dark:bg-zinc-900 overflow-visible">
       <div className="px-5 py-4 flex flex-col md:flex-row md:items-center gap-3 border-b border-zinc-100 dark:border-zinc-800">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
@@ -737,51 +994,61 @@ function MarketCard({
             Find sponsor leads <ExternalLink className="h-3.5 w-3.5" />
           </button>
           <button onClick={() => onToggleMarket(market.id)} className="link-btn text-xs">
-            {expanded ? "Collapse" : `Show all ${prospectCount(market)}`}
+            {expanded ? "Collapse" : "Expand"}
             {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
           </button>
         </div>
       </div>
-      <div className="divide-y divide-zinc-100 dark:divide-zinc-800 text-sm">
-        {prospects.length === 0 && <div className="px-5 py-3 text-xs text-zinc-500">No sponsor prospects populated yet.</div>}
-        {prospects.map((prospect) => (
-          <div key={prospect.id} className="px-5 py-3">
-            <div className="flex flex-col md:flex-row md:items-start gap-2">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-medium">{prospect.name}</span>
-                  <span className="text-zinc-400">-</span>
-                  <span className="text-zinc-600 dark:text-zinc-400">{prospect.prospect_type}</span>
-                  {prospect.political_leaning && <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500">{prospect.political_leaning}</span>}
+      {expanded && (
+        <div className="divide-y divide-zinc-100 dark:divide-zinc-800 text-sm">
+          {prospects.length === 0 && <div className="px-5 py-3 text-xs text-zinc-500">No sponsor prospects populated yet.</div>}
+          {prospects.map((prospect, index) => (
+            <div key={prospectRenderKey(market.id, prospect, index)} className="px-5 py-3">
+              <div className="flex flex-col md:flex-row md:items-start gap-2">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-medium">{prospect.name}</span>
+                    <span className="text-zinc-400">-</span>
+                    <span className="text-zinc-600 dark:text-zinc-400">{prospect.prospect_type}</span>
+                    {prospect.political_leaning && <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500">{prospect.political_leaning}</span>}
+                  </div>
+                  <p className="text-xs text-zinc-500 mt-1">{prospect.description}</p>
+                  {prospect.sponsor_fit && <p className="text-[11px] text-zinc-500 mt-1"><span className="font-medium">Fit:</span> {prospect.sponsor_fit}</p>}
                 </div>
-                <p className="text-xs text-zinc-500 mt-1">{prospect.description}</p>
-                {prospect.sponsor_fit && <p className="text-[11px] text-zinc-500 mt-1"><span className="font-medium">Fit:</span> {prospect.sponsor_fit}</p>}
+                <div className="flex items-center gap-2 shrink-0">
+                  {prospect.website_url && <button onClick={() => onOpen(prospect.website_url)} className="link-btn">Website <ExternalLink className="h-3.5 w-3.5" /></button>}
+                  {prospect.contact_url && <button onClick={() => onOpen(prospect.contact_url)} className="link-btn">Contact <ExternalLink className="h-3.5 w-3.5" /></button>}
+                </div>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
-                {prospect.website_url && <button onClick={() => onOpen(prospect.website_url)} className="link-btn">Website <ExternalLink className="h-3.5 w-3.5" /></button>}
-                {prospect.contact_url && <button onClick={() => onOpen(prospect.contact_url)} className="link-btn">Contact <ExternalLink className="h-3.5 w-3.5" /></button>}
+              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
+                {(prospect.contacts || [])
+                  .filter((contact, index) => !hideContacted || !contacted.has(contactKey(market.id, prospect, contact, index)))
+                  .map((contact, index) => {
+                    const key = contactKey(market.id, prospect, contact, index);
+                    const on = contacted.has(key);
+                    return (
+                      <ContactChip
+                        key={key}
+                        market={market}
+                        prospect={prospect}
+                        contact={contact}
+                        contactKeyValue={key}
+                        contacted={on}
+                        open={activeContactKey === key}
+                        onToggle={() => onToggle(key)}
+                        onOpenDetails={() => onShowContact(activeContactKey === key ? null : key)}
+                        onClose={onCloseContact}
+                        onMark={() => onMark(key)}
+                        onCopy={onCopy}
+                        onOpenUrl={onOpen}
+                      />
+                    );
+                  })}
               </div>
             </div>
-            <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
-              {(prospect.contacts || [])
-                .filter((contact, index) => !hideContacted || !contacted.has(contactKey(market.id, prospect, contact, index)))
-                .map((contact, index) => {
-                  const key = contactKey(market.id, prospect, contact, index);
-                  const on = contacted.has(key);
-                  const href = contact.linkedin_url || contact.contact_url || prospect.contact_url;
-                  return (
-                    <span key={key} className="inline-flex items-center gap-1">
-                      <ContactCheckbox checked={on} onChange={() => onToggle(key)} title={on ? "Contacted - click to undo" : "Mark contacted"} size={13} />
-                      <a href={href || undefined} target="_blank" rel="noopener noreferrer" onClick={() => href && onMark(key)} className={on ? "text-emerald-600 dark:text-emerald-400 hover:underline" : "hover:underline"}>{contact.name}</a>
-                      <span className="text-zinc-400">{contact.title}</span>
-                      {contact.email && <button onClick={() => onCopy(contact.email || "", "email")}><Copy className="h-3 w-3 text-zinc-400" /></button>}
-                    </span>
-                  );
-                })}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

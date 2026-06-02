@@ -6,15 +6,37 @@
 node job/scripts/sponsor-region-orchestrator.js start
 ```
 
-This starts parallel Codex workers across the sponsor markets. By default it caps active workers at 24.
+This starts parallel Codex workers across the contiguous mainland U.S. state markets and keeps launching new batches until you stop it. By default it caps active workers at 24 and does not launch global country, U.S. territory, D.C., Alaska, or Hawaii markets.
+
+The swarm is continuous: after a market reaches its target, it keeps coming back for enrichment and expansion batches until you stop it.
+
+Raise the target when you want under-target markets to be prioritized more aggressively:
+
+```bash
+node job/scripts/sponsor-region-orchestrator.js start --target 20
+```
 
 Use a smaller run when you want to test:
 
 ```bash
-node job/scripts/sponsor-region-orchestrator.js start --max-active 4 florida texas canada
+node job/scripts/sponsor-region-orchestrator.js start --max-active 4 florida texas california
 ```
 
-## Keep It Moving
+Global country markets are opt-in:
+
+```bash
+node job/scripts/sponsor-region-orchestrator.js start --global
+```
+
+Other broad scopes:
+
+```bash
+node job/scripts/sponsor-region-orchestrator.js start --us-states
+node job/scripts/sponsor-region-orchestrator.js start --us-all
+node job/scripts/sponsor-region-orchestrator.js start --all
+```
+
+## Reattach Or Keep It Moving
 
 ```bash
 node job/scripts/sponsor-region-orchestrator.js monitor
@@ -22,15 +44,19 @@ node job/scripts/sponsor-region-orchestrator.js monitor
 
 Leave this running to launch new batches as workers finish. It also prints estimated agent-hours and cost using `SPONSOR_SWARM_HOURLY_AGENT_COST` or `--hourly-cost`.
 
+Use `monitor` if the original `start` terminal was closed or if workers are already active and you want to keep the launcher running.
+
 ## Check Status
 
 ```bash
 node job/scripts/sponsor-region-orchestrator.js status
 ```
 
-Status shows markets that still need work, active workers, finished batches, missing outreach routes, under-target markets, and estimated session cost.
+Status shows the active launch scope, continuous research mode, queued markets, active workers, finished batches, missing outreach routes, under-target markets, and estimated session cost.
 
-The scheduler is hands-off: it runs one worker per market at a time, rotates through markets by batch count, prioritizes American markets inside each pass, and only revisits a market after other markets with fewer batches have had a pass.
+It reports scope totals first, then all-market totals when those differ. This keeps the default mainland U.S. run from looking like it is trying to launch all 96 markets.
+
+The scheduler is hands-off: it runs one worker per market at a time, rotates through markets by batch count, and only revisits a market after other markets in the active scope with fewer batches have had a pass.
 
 ## Stop Gracefully
 
