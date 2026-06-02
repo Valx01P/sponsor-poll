@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: sponsor-poll-gte-server
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 8788
+      - key: EMBEDDING_MODEL
+        value: Supabase/gte-small
+      - key: EMBEDDING_DIM
+        value: 384
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: "*"

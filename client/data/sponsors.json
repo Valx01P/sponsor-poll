@@ -1,0 +1,1836 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "last_updated": "2026-06-02",
+    "total_markets": 96,
+    "total_prospects": 0,
+    "total_contacts": 0,
+    "notes": "Canonical sponsor poll lead knowledge base. Job agents edit region partitions; merge script writes this aggregate and the client data copy."
+  },
+  "markets": [
+    {
+      "id": "US-AL",
+      "name": "Alabama",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Alabama polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Alabama%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-AK",
+      "name": "Alaska",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "Alaska polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Alaska%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-AZ",
+      "name": "Arizona",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 1,
+      "description": "Arizona polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Arizona%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-AR",
+      "name": "Arkansas",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Arkansas polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Arkansas%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-CA",
+      "name": "California",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 1,
+      "description": "California polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=California%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-CO",
+      "name": "Colorado",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "Colorado polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Colorado%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-CT",
+      "name": "Connecticut",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Northeast",
+      "priority": 2,
+      "description": "Connecticut polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Connecticut%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-DE",
+      "name": "Delaware",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Delaware polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Delaware%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-DC",
+      "name": "District of Columbia",
+      "region_type": "district",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "District of Columbia polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=District%20of%20Columbia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-FL",
+      "name": "Florida",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 1,
+      "description": "Florida polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Florida%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-GA",
+      "name": "Georgia",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 1,
+      "description": "Georgia polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Georgia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-HI",
+      "name": "Hawaii",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "Hawaii polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Hawaii%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-ID",
+      "name": "Idaho",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "Idaho polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Idaho%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-IL",
+      "name": "Illinois",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "Illinois polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Illinois%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-IN",
+      "name": "Indiana",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "Indiana polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Indiana%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-IA",
+      "name": "Iowa",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "Iowa polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Iowa%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-KS",
+      "name": "Kansas",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "Kansas polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Kansas%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-KY",
+      "name": "Kentucky",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Kentucky polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Kentucky%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-LA",
+      "name": "Louisiana",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Louisiana polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Louisiana%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-ME",
+      "name": "Maine",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Northeast",
+      "priority": 2,
+      "description": "Maine polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Maine%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-MD",
+      "name": "Maryland",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Maryland polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Maryland%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-MA",
+      "name": "Massachusetts",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Northeast",
+      "priority": 2,
+      "description": "Massachusetts polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Massachusetts%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-MI",
+      "name": "Michigan",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 1,
+      "description": "Michigan polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Michigan%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-MN",
+      "name": "Minnesota",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "Minnesota polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Minnesota%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-MS",
+      "name": "Mississippi",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Mississippi polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Mississippi%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-MO",
+      "name": "Missouri",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "Missouri polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Missouri%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-MT",
+      "name": "Montana",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "Montana polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Montana%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-NE",
+      "name": "Nebraska",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "Nebraska polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Nebraska%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-NV",
+      "name": "Nevada",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 1,
+      "description": "Nevada polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Nevada%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-NH",
+      "name": "New Hampshire",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Northeast",
+      "priority": 2,
+      "description": "New Hampshire polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=New%20Hampshire%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-NJ",
+      "name": "New Jersey",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Northeast",
+      "priority": 2,
+      "description": "New Jersey polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=New%20Jersey%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-NM",
+      "name": "New Mexico",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "New Mexico polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=New%20Mexico%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-NY",
+      "name": "New York",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Northeast",
+      "priority": 1,
+      "description": "New York polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=New%20York%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-NC",
+      "name": "North Carolina",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 1,
+      "description": "North Carolina polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=North%20Carolina%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-ND",
+      "name": "North Dakota",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "North Dakota polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=North%20Dakota%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-OH",
+      "name": "Ohio",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "Ohio polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Ohio%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-OK",
+      "name": "Oklahoma",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Oklahoma polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Oklahoma%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-OR",
+      "name": "Oregon",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "Oregon polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Oregon%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-PA",
+      "name": "Pennsylvania",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Northeast",
+      "priority": 1,
+      "description": "Pennsylvania polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Pennsylvania%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-RI",
+      "name": "Rhode Island",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Northeast",
+      "priority": 2,
+      "description": "Rhode Island polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Rhode%20Island%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-SC",
+      "name": "South Carolina",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "South Carolina polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=South%20Carolina%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-SD",
+      "name": "South Dakota",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 2,
+      "description": "South Dakota polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=South%20Dakota%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-TN",
+      "name": "Tennessee",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Tennessee polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Tennessee%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-TX",
+      "name": "Texas",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 1,
+      "description": "Texas polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Texas%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-UT",
+      "name": "Utah",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "Utah polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Utah%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-VT",
+      "name": "Vermont",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Northeast",
+      "priority": 2,
+      "description": "Vermont polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Vermont%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-VA",
+      "name": "Virginia",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "Virginia polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Virginia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-WA",
+      "name": "Washington",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "Washington polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Washington%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-WV",
+      "name": "West Virginia",
+      "region_type": "state",
+      "country": "United States",
+      "region": "South",
+      "priority": 2,
+      "description": "West Virginia polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=West%20Virginia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-WI",
+      "name": "Wisconsin",
+      "region_type": "state",
+      "country": "United States",
+      "region": "Midwest",
+      "priority": 1,
+      "description": "Wisconsin polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Wisconsin%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-WY",
+      "name": "Wyoming",
+      "region_type": "state",
+      "country": "United States",
+      "region": "West",
+      "priority": 2,
+      "description": "Wyoming polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Wyoming%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-PR",
+      "name": "Puerto Rico",
+      "region_type": "territory",
+      "country": "United States",
+      "region": "Territory",
+      "priority": 2,
+      "description": "Puerto Rico polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Puerto%20Rico%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-GU",
+      "name": "Guam",
+      "region_type": "territory",
+      "country": "United States",
+      "region": "Territory",
+      "priority": 2,
+      "description": "Guam polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Guam%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "US-VI",
+      "name": "U.S. Virgin Islands",
+      "region_type": "territory",
+      "country": "United States",
+      "region": "Territory",
+      "priority": 2,
+      "description": "U.S. Virgin Islands polling sponsorship market. Research chambers, trade associations, issue advocacy groups, donors, media outlets, campaigns, PACs, civic organizations, universities, and businesses that may fund public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=U.S.%20Virgin%20Islands%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-CA",
+      "name": "Canada",
+      "region_type": "country",
+      "country": "Canada",
+      "region": "North America",
+      "priority": 1,
+      "description": "Canada English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Canada%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-GB",
+      "name": "United Kingdom",
+      "region_type": "country",
+      "country": "United Kingdom",
+      "region": "Europe",
+      "priority": 1,
+      "description": "United Kingdom English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=United%20Kingdom%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-IE",
+      "name": "Ireland",
+      "region_type": "country",
+      "country": "Ireland",
+      "region": "Europe",
+      "priority": 1,
+      "description": "Ireland English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Ireland%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-AU",
+      "name": "Australia",
+      "region_type": "country",
+      "country": "Australia",
+      "region": "Oceania",
+      "priority": 1,
+      "description": "Australia English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Australia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-NZ",
+      "name": "New Zealand",
+      "region_type": "country",
+      "country": "New Zealand",
+      "region": "Oceania",
+      "priority": 1,
+      "description": "New Zealand English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=New%20Zealand%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-ZA",
+      "name": "South Africa",
+      "region_type": "country",
+      "country": "South Africa",
+      "region": "Africa",
+      "priority": 1,
+      "description": "South Africa English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=South%20Africa%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-IN",
+      "name": "India",
+      "region_type": "country",
+      "country": "India",
+      "region": "Asia",
+      "priority": 1,
+      "description": "India English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=India%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-NG",
+      "name": "Nigeria",
+      "region_type": "country",
+      "country": "Nigeria",
+      "region": "Africa",
+      "priority": 1,
+      "description": "Nigeria English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Nigeria%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-GH",
+      "name": "Ghana",
+      "region_type": "country",
+      "country": "Ghana",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Ghana English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Ghana%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-KE",
+      "name": "Kenya",
+      "region_type": "country",
+      "country": "Kenya",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Kenya English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Kenya%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-SG",
+      "name": "Singapore",
+      "region_type": "country",
+      "country": "Singapore",
+      "region": "Asia",
+      "priority": 2,
+      "description": "Singapore English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Singapore%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-PH",
+      "name": "Philippines",
+      "region_type": "country",
+      "country": "Philippines",
+      "region": "Asia",
+      "priority": 2,
+      "description": "Philippines English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Philippines%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-JM",
+      "name": "Jamaica",
+      "region_type": "country",
+      "country": "Jamaica",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Jamaica English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Jamaica%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-TT",
+      "name": "Trinidad and Tobago",
+      "region_type": "country",
+      "country": "Trinidad and Tobago",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Trinidad and Tobago English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Trinidad%20and%20Tobago%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-BB",
+      "name": "Barbados",
+      "region_type": "country",
+      "country": "Barbados",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Barbados English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Barbados%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-BS",
+      "name": "Bahamas",
+      "region_type": "country",
+      "country": "Bahamas",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Bahamas English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Bahamas%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-BZ",
+      "name": "Belize",
+      "region_type": "country",
+      "country": "Belize",
+      "region": "Central America",
+      "priority": 2,
+      "description": "Belize English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Belize%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-GY",
+      "name": "Guyana",
+      "region_type": "country",
+      "country": "Guyana",
+      "region": "South America",
+      "priority": 2,
+      "description": "Guyana English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Guyana%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-MT",
+      "name": "Malta",
+      "region_type": "country",
+      "country": "Malta",
+      "region": "Europe",
+      "priority": 2,
+      "description": "Malta English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Malta%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-CY",
+      "name": "Cyprus",
+      "region_type": "country",
+      "country": "Cyprus",
+      "region": "Europe",
+      "priority": 2,
+      "description": "Cyprus English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Cyprus%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-UG",
+      "name": "Uganda",
+      "region_type": "country",
+      "country": "Uganda",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Uganda English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Uganda%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-TZ",
+      "name": "Tanzania",
+      "region_type": "country",
+      "country": "Tanzania",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Tanzania English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Tanzania%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-RW",
+      "name": "Rwanda",
+      "region_type": "country",
+      "country": "Rwanda",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Rwanda English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Rwanda%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-ZM",
+      "name": "Zambia",
+      "region_type": "country",
+      "country": "Zambia",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Zambia English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Zambia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-ZW",
+      "name": "Zimbabwe",
+      "region_type": "country",
+      "country": "Zimbabwe",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Zimbabwe English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Zimbabwe%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-BW",
+      "name": "Botswana",
+      "region_type": "country",
+      "country": "Botswana",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Botswana English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Botswana%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-NA",
+      "name": "Namibia",
+      "region_type": "country",
+      "country": "Namibia",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Namibia English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Namibia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-MW",
+      "name": "Malawi",
+      "region_type": "country",
+      "country": "Malawi",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Malawi English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Malawi%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-SL",
+      "name": "Sierra Leone",
+      "region_type": "country",
+      "country": "Sierra Leone",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Sierra Leone English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Sierra%20Leone%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-LR",
+      "name": "Liberia",
+      "region_type": "country",
+      "country": "Liberia",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Liberia English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Liberia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-GM",
+      "name": "Gambia",
+      "region_type": "country",
+      "country": "Gambia",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Gambia English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Gambia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-MU",
+      "name": "Mauritius",
+      "region_type": "country",
+      "country": "Mauritius",
+      "region": "Africa",
+      "priority": 2,
+      "description": "Mauritius English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Mauritius%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-FJ",
+      "name": "Fiji",
+      "region_type": "country",
+      "country": "Fiji",
+      "region": "Oceania",
+      "priority": 2,
+      "description": "Fiji English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Fiji%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-PG",
+      "name": "Papua New Guinea",
+      "region_type": "country",
+      "country": "Papua New Guinea",
+      "region": "Oceania",
+      "priority": 2,
+      "description": "Papua New Guinea English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Papua%20New%20Guinea%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-WS",
+      "name": "Samoa",
+      "region_type": "country",
+      "country": "Samoa",
+      "region": "Oceania",
+      "priority": 2,
+      "description": "Samoa English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Samoa%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-TO",
+      "name": "Tonga",
+      "region_type": "country",
+      "country": "Tonga",
+      "region": "Oceania",
+      "priority": 2,
+      "description": "Tonga English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Tonga%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-LC",
+      "name": "Saint Lucia",
+      "region_type": "country",
+      "country": "Saint Lucia",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Saint Lucia English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Saint%20Lucia%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-VC",
+      "name": "Saint Vincent and the Grenadines",
+      "region_type": "country",
+      "country": "Saint Vincent and the Grenadines",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Saint Vincent and the Grenadines English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Saint%20Vincent%20and%20the%20Grenadines%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-GD",
+      "name": "Grenada",
+      "region_type": "country",
+      "country": "Grenada",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Grenada English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Grenada%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-AG",
+      "name": "Antigua and Barbuda",
+      "region_type": "country",
+      "country": "Antigua and Barbuda",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Antigua and Barbuda English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Antigua%20and%20Barbuda%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-DM",
+      "name": "Dominica",
+      "region_type": "country",
+      "country": "Dominica",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Dominica English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Dominica%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    },
+    {
+      "id": "INTL-KN",
+      "name": "Saint Kitts and Nevis",
+      "region_type": "country",
+      "country": "Saint Kitts and Nevis",
+      "region": "Caribbean",
+      "priority": 2,
+      "description": "Saint Kitts and Nevis English-language polling sponsorship market. Research politically active funders, media groups, advocacy organizations, business associations, think tanks, campaigns, and civic institutions that may sponsor public opinion polling.",
+      "poll_topics": [
+        "elections",
+        "public policy",
+        "business sentiment",
+        "local issues",
+        "voter attitudes"
+      ],
+      "sponsor_search_url": "https://www.google.com/search?q=Saint%20Kitts%20and%20Nevis%20poll%20sponsor%20political%20donor%20advocacy%20business%20association",
+      "prospect_notes": "",
+      "prospects": []
+    }
+  ]
+}

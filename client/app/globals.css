@@ -1,26 +1,64 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  font-family: var(--font-geist-sans);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+button,
+summary,
+select,
+label,
+a,
+[role="button"],
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+.badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.priority-1 { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.dark .priority-1 { background: #14532d; color: #86efac; border-color: #166534; }
+
+.priority-2 { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+.dark .priority-2 { background: #713f12; color: #fde047; border-color: #854d0e; }
+
+.priority-3 { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+.dark .priority-3 { background: #334155; color: #cbd5e1; border-color: #475569; }
+
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid rgb(228 228 231);
+  background: white;
+  color: #18181b;
+}
+
+.dark .link-btn {
+  background: #18181b;
+  color: #e4e4e7;
+  border-color: #3f3f46;
 }
