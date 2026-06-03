@@ -24,12 +24,26 @@ import rawData from "../data/sponsors.json";
 
 type OutreachFilter = "all" | "contacted" | "incomplete" | "untouched";
 type ViewMode = "compact" | "cards";
+type SearchTerm = { token: string; alternatives: string[] };
+type SearchScope = {
+  marketOnly: boolean;
+  prospectIds: Set<string>;
+  fullProspectIds: Set<string>;
+  contactKeys: Set<string>;
+};
 
 const data = rawData as SponsorData;
 const allMarkets = data.markets;
 const CONTACTED_KEY = "sp-contacted-v1";
 const VIEW_KEY = "sp-view-v1";
 const SIM_KEY = "sp-sim-threshold-v1";
+const SEARCH_ALIASES: Record<string, string[]> = {
+  lgbt: ["lgbt", "lgbtq", "lgbtqia"],
+  lgbtq: ["lgbtq", "lgbt", "lgbtqia"],
+  lgbtqia: ["lgbtqia", "lgbtq", "lgbt"],
+  lgtb: ["lgbtq", "lgbt", "lgbtqia"],
+  lgtbq: ["lgbtq", "lgbt", "lgbtqia"],
+};
 
 const keyPart = (value?: string) =>
   String(value || "")
@@ -82,9 +96,93 @@ function migrateContactedKeys(saved: Set<string>) {
 const prospectRenderKey = (marketId: string, prospect: SponsorProspect, index: number) =>
   `${marketId}#${prospectKeyPart(prospect) || index}`;
 
+const prospectIdentity = (prospect: SponsorProspect) => prospect.id || prospect.name;
 const prospectCount = (market: SponsorMarket) => market.prospects?.length || 0;
 const contactCount = (market: SponsorMarket) =>
   (market.prospects || []).reduce((sum, prospect) => sum + (prospect.contacts?.length || 0), 0);
+
+function normalizeSearchText(value: unknown) {
+  const text = String(value || "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+  return text ? ` ${text} ` : " ";
+}
+
+function searchText(parts: unknown[]) {
+  return normalizeSearchText(parts.filter(Boolean).join(" "));
+}
+
+function searchTerms(query: string): SearchTerm[] {
+  const seen = new Set<string>();
+  return normalizeSearchText(query)
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((token) => ({ token, alternatives: SEARCH_ALIASES[token] || [token] }))
+    .filter((term) => {
+      if (seen.has(term.token)) return false;
+      seen.add(term.token);
+      return true;
+    });
+}
+
+function hasSearchTerm(hay: string, term: SearchTerm) {
+  return term.alternatives.some((alternative) => {
+    const normalized = normalizeSearchText(alternative).trim();
+    if (!normalized) return false;
+    return normalized.length <= 3 ? hay.includes(` ${normalized} `) : hay.includes(normalized);
+  });
+}
+
+function matchesSearchTerms(hay: string, terms: SearchTerm[]) {
+  return !terms.length || terms.every((term) => hasSearchTerm(hay, term));
+}
+
+function createSearchScope(marketOnly = false): SearchScope {
+  return {
+    marketOnly,
+    prospectIds: new Set<string>(),
+    fullProspectIds: new Set<string>(),
+    contactKeys: new Set<string>(),
+  };
+}
+
+function scopeIsFiltering(scope?: SearchScope) {
+  return Boolean(scope && !scope.marketOnly);
+}
+
+function shouldShowProspect(prospect: SponsorProspect, scope?: SearchScope) {
+  return !scopeIsFiltering(scope) || scope!.prospectIds.has(prospectIdentity(prospect));
+}
+
+function shouldShowContact(marketId: string, prospect: SponsorProspect, contact: SponsorContact, index: number, scope?: SearchScope) {
+  if (!scopeIsFiltering(scope)) return true;
+  const prospectId = prospectIdentity(prospect);
+  return scope!.fullProspectIds.has(prospectId) || scope!.contactKeys.has(contactKey(marketId, prospect, contact, index));
+}
+
+function flattenContacts(market: SponsorMarket, scope?: SearchScope) {
+  const rows: { prospect: SponsorProspect; contact: SponsorContact; index: number }[] = [];
+  let index = 0;
+  for (const prospect of market.prospects || []) {
+    for (const contact of prospect.contacts || []) {
+      if (shouldShowContact(market.id, prospect, contact, index, scope)) rows.push({ prospect, contact, index });
+      index++;
+    }
+  }
+  return rows;
+}
+
+function visibleProspectCount(market: SponsorMarket, scope?: SearchScope) {
+  return scopeIsFiltering(scope) ? (market.prospects || []).filter((prospect) => shouldShowProspect(prospect, scope)).length : prospectCount(market);
+}
+
+function visibleContactCount(market: SponsorMarket, scope?: SearchScope) {
+  return flattenContacts(market, scope).length;
+}
 
 export default function SponsorPollDirectory() {
   const [searchInput, setSearchInput] = useState("");
@@ -162,7 +260,7 @@ export default function SponsorPollDirectory() {
   const indexed = useMemo(
     () =>
       allMarkets.map((market) => {
-        const parts = [
+        const marketParts = [
           market.name,
           market.region_type,
           market.country,
@@ -171,8 +269,10 @@ export default function SponsorPollDirectory() {
           market.prospect_notes || "",
           ...(market.poll_topics || []),
         ];
-        for (const prospect of market.prospects || []) {
-          parts.push(
+        const marketHay = searchText(marketParts);
+        let contactIndex = 0;
+        const prospects = (market.prospects || []).map((prospect) => {
+          const prospectHay = searchText([
             prospect.name,
             prospect.prospect_type,
             prospect.description,
@@ -183,12 +283,16 @@ export default function SponsorPollDirectory() {
             prospect.prior_poll_sponsorship || "",
             prospect.estimated_budget || "",
             prospect.notes || "",
-          );
-          for (const contact of prospect.contacts || []) {
-            parts.push(contact.name, contact.title, contact.email || "", contact.location || "", contact.notes || "");
-          }
-        }
-        return { market, hay: parts.join(" ⁣ ").toLowerCase() };
+          ]);
+          const contacts = (prospect.contacts || []).map((contact) => ({
+            contact,
+            index: contactIndex++,
+            hay: searchText([contact.name, contact.title, contact.email || "", contact.location || "", contact.political_leaning || "", contact.notes || ""]),
+          }));
+          const hay = `${prospectHay} ${contacts.map((contact) => contact.hay).join(" ")}`;
+          return { prospect, hay, prospectHay, contacts };
+        });
+        return { market, marketHay, hay: `${marketHay} ${prospects.map((prospect) => prospect.hay).join(" ")}`, prospects };
       }),
     [],
   );
@@ -220,10 +324,12 @@ export default function SponsorPollDirectory() {
   const populatedMarkets = useMemo(() => allMarkets.filter((market) => prospectCount(market) > 0).length, []);
   const contactedCount = useMemo(() => [...rollup.values()].reduce((sum, value) => sum + value.contacted, 0), [rollup]);
 
-  const filteredMarkets = useMemo(() => {
-    const tokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const keywordResults = useMemo(() => {
+    const terms = searchTerms(searchQuery);
+    const scopes = new Map<string, SearchScope>();
     let result = indexed
-      .filter(({ market, hay }) => {
+      .filter((entry) => {
+        const { market, hay, marketHay, prospects } = entry;
         if (!selectedPriorities.has(market.priority)) return false;
         if (selectedTypes.size && !selectedTypes.has(market.region_type)) return false;
         const status = rollup.get(market.id)!;
@@ -231,7 +337,28 @@ export default function SponsorPollDirectory() {
         if (outreachFilter === "incomplete" && status.total > 0 && status.contacted >= status.total) return false;
         if (outreachFilter === "untouched" && status.contacted !== 0) return false;
         if (hideContacted && status.total > 0 && status.contacted >= status.total) return false;
-        if (tokens.length && !tokens.every((token) => hay.includes(token))) return false;
+        if (terms.length && !matchesSearchTerms(hay, terms)) return false;
+        if (terms.length) {
+          const scope = createSearchScope(matchesSearchTerms(marketHay, terms));
+          if (!scope.marketOnly) {
+            for (const prospectEntry of prospects) {
+              const prospectHay = `${marketHay} ${prospectEntry.prospectHay}`;
+              const prospectMatches = matchesSearchTerms(prospectHay, terms);
+              const matchingContacts = prospectEntry.contacts.filter((contactEntry) => matchesSearchTerms(`${prospectHay} ${contactEntry.hay}`, terms));
+              if (!prospectMatches && matchingContacts.length === 0) continue;
+
+              const prospectId = prospectIdentity(prospectEntry.prospect);
+              scope.prospectIds.add(prospectId);
+              if (prospectMatches) scope.fullProspectIds.add(prospectId);
+              else {
+                for (const { contact, index } of matchingContacts) {
+                  scope.contactKeys.add(contactKey(market.id, prospectEntry.prospect, contact, index));
+                }
+              }
+            }
+          }
+          scopes.set(market.id, scope.prospectIds.size || scope.marketOnly ? scope : createSearchScope(true));
+        }
         return true;
       })
       .map(({ market }) => market);
@@ -242,9 +369,11 @@ export default function SponsorPollDirectory() {
       return a.name.localeCompare(b.name);
     });
     if (sortReversed) result.reverse();
-    return result;
+    return { markets: result, scopes };
   }, [indexed, selectedPriorities, selectedTypes, rollup, outreachFilter, hideContacted, searchQuery, sortMode, sortReversed]);
 
+  const filteredMarkets = keywordResults.markets;
+  const keywordScopes = keywordResults.scopes;
   const PAGE = 80;
   const [visibleCount, setVisibleCount] = useState(PAGE);
   useEffect(() => {
@@ -252,10 +381,10 @@ export default function SponsorPollDirectory() {
   }, [searchQuery, selectedPriorities, selectedTypes, outreachFilter, hideContacted, sortMode, sortReversed]);
 
   const visibleMarkets = filteredMarkets.slice(0, visibleCount);
-  const visibleProspects = filteredMarkets.reduce((sum, market) => sum + prospectCount(market), 0);
-  const visibleContacts = filteredMarkets.reduce((sum, market) => sum + contactCount(market), 0);
+  const visibleProspects = filteredMarkets.reduce((sum, market) => sum + visibleProspectCount(market, keywordScopes.get(market.id)), 0);
+  const visibleContacts = filteredMarkets.reduce((sum, market) => sum + visibleContactCount(market, keywordScopes.get(market.id)), 0);
 
-  type Suggestion = { market: SponsorMarket; similarity: number };
+  type Suggestion = { market: SponsorMarket; similarity: number; scope?: SearchScope };
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [suggesting, setSuggesting] = useState(false);
   const [semanticError, setSemanticError] = useState(false);
@@ -284,10 +413,28 @@ export default function SponsorPollDirectory() {
       .then(({ semanticSearch }) => semanticSearch(searchQuery.trim(), 100))
       .then((matches) => {
         if (cancelled) return;
+        const byMarket = new Map<string, Suggestion>();
+        for (const match of matches) {
+          const marketId = match.market_id || match.id;
+          const market = marketById.get(marketId);
+          if (!market) continue;
+
+          const existing = byMarket.get(marketId);
+          const suggestion = existing || { market, similarity: match.similarity, scope: createSearchScope(false) };
+          suggestion.similarity = Math.max(suggestion.similarity, match.similarity);
+          if (match.prospect_id) {
+            suggestion.scope!.prospectIds.add(match.prospect_id);
+            suggestion.scope!.fullProspectIds.add(match.prospect_id);
+          } else {
+            suggestion.scope = createSearchScope(true);
+          }
+          byMarket.set(marketId, suggestion);
+        }
+
         setSuggestions(
-          matches
-            .map((match) => ({ market: marketById.get(match.id), similarity: match.similarity }))
-            .filter((item): item is Suggestion => Boolean(item.market)),
+          [...byMarket.values()]
+            .map((suggestion) => (suggestion.scope && !suggestion.scope.marketOnly && suggestion.scope.prospectIds.size === 0 ? { ...suggestion, scope: undefined } : suggestion))
+            .sort((a, b) => b.similarity - a.similarity),
         );
       })
       .catch(() => {
@@ -382,12 +529,14 @@ export default function SponsorPollDirectory() {
       ["Market", "Region Type", "Country", "Priority", "Prospect", "Type", "Description", "Political Leaning", "Sponsor Fit", "Sponsorship History", "Estimated Budget", "Contact Name", "Title", "Email", "LinkedIn", "Contact URL", "Contacted", "Notes"],
     ];
     for (const market of allMarkets) {
+      let contactIndex = 0;
       for (const prospect of market.prospects || []) {
         if (!prospect.contacts?.length) {
           rows.push([market.name, market.region_type, market.country, String(market.priority), prospect.name, prospect.prospect_type, prospect.description, prospect.political_leaning || "", prospect.sponsor_fit || "", prospect.sponsorship_history || "", prospect.estimated_budget || "", "", "", "", "", "", "", prospect.notes || ""]);
         }
-        prospect.contacts?.forEach((contact, index) => {
-          rows.push([market.name, market.region_type, market.country, String(market.priority), prospect.name, prospect.prospect_type, prospect.description, prospect.political_leaning || "", prospect.sponsor_fit || "", prospect.sponsorship_history || "", prospect.estimated_budget || "", contact.name, contact.title, contact.email || "", contact.linkedin_url || "", contact.contact_url || "", contacted.has(contactKey(market.id, prospect, contact, index)) ? "yes" : "", contact.notes || ""]);
+        prospect.contacts?.forEach((contact) => {
+          rows.push([market.name, market.region_type, market.country, String(market.priority), prospect.name, prospect.prospect_type, prospect.description, prospect.political_leaning || "", prospect.sponsor_fit || "", prospect.sponsorship_history || "", prospect.estimated_budget || "", contact.name, contact.title, contact.email || "", contact.linkedin_url || "", contact.contact_url || "", contacted.has(contactKey(market.id, prospect, contact, contactIndex)) ? "yes" : "", contact.notes || ""]);
+          contactIndex++;
         });
       }
     }
@@ -575,7 +724,7 @@ export default function SponsorPollDirectory() {
                 {shownSuggestions.length > 0 && (
                   <div className="max-w-3xl mx-auto text-left">
                     <div className="flex items-center justify-between mb-2">
-                      <div className="text-xs uppercase tracking-widest text-zinc-500">Closest markets by meaning - {shownSuggestions.length}</div>
+                      <div className="text-xs uppercase tracking-widest text-zinc-500">Closest matches by meaning - {shownSuggestions.length}</div>
                       <label className="flex items-center gap-2 text-xs text-zinc-500">
                         <span>Min match</span>
                         <input
@@ -594,10 +743,10 @@ export default function SponsorPollDirectory() {
                       </label>
                     </div>
                     <div className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-visible">
-                      {shownSuggestions.map(({ market, similarity }) => (
+                      {shownSuggestions.map(({ market, similarity, scope }) => (
                         <div key={market.id} className="relative">
                           <span className="absolute right-3 top-2 z-10 text-[10px] font-mono text-zinc-400">{Math.round(similarity * 100)}%</span>
-                          <CompactRow market={market} status={rollup.get(market.id)!} contacted={contacted} hideContacted={hideContacted} expanded={expandedMarkets.has(market.id)} activeContactKey={activeContactKey} onShowContact={setActiveContactKey} onCloseContact={() => setActiveContactKey(null)} onToggleMarket={toggleMarket} onToggle={toggleContact} onMark={markContacted} onCopy={copy} onOpen={open} />
+                          <CompactRow market={market} matchScope={scope} status={rollup.get(market.id)!} contacted={contacted} hideContacted={hideContacted} expanded={expandedMarkets.has(market.id)} activeContactKey={activeContactKey} onShowContact={setActiveContactKey} onCloseContact={() => setActiveContactKey(null)} onToggleMarket={toggleMarket} onToggle={toggleContact} onMark={markContacted} onCopy={copy} onOpen={open} />
                         </div>
                       ))}
                     </div>
@@ -621,7 +770,7 @@ export default function SponsorPollDirectory() {
           view === "compact" ? (
             <div ref={listRef} className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-visible">
               {visibleMarkets.map((market) => (
-                <CompactRow key={market.id} market={market} status={rollup.get(market.id)!} contacted={contacted} hideContacted={hideContacted} expanded={expandedMarkets.has(market.id)} activeContactKey={activeContactKey} onShowContact={setActiveContactKey} onCloseContact={() => setActiveContactKey(null)} onToggleMarket={toggleMarket} onToggle={toggleContact} onMark={markContacted} onCopy={copy} onOpen={open} />
+                <CompactRow key={market.id} market={market} matchScope={keywordScopes.get(market.id)} status={rollup.get(market.id)!} contacted={contacted} hideContacted={hideContacted} expanded={expandedMarkets.has(market.id)} activeContactKey={activeContactKey} onShowContact={setActiveContactKey} onCloseContact={() => setActiveContactKey(null)} onToggleMarket={toggleMarket} onToggle={toggleContact} onMark={markContacted} onCopy={copy} onOpen={open} />
               ))}
             </div>
           ) : (
@@ -630,6 +779,7 @@ export default function SponsorPollDirectory() {
                 <MarketCard
                   key={market.id}
                   market={market}
+                  matchScope={keywordScopes.get(market.id)}
                   status={rollup.get(market.id)!}
                   contacted={contacted}
                   hideContacted={hideContacted}
@@ -685,17 +835,9 @@ function ContactCheckbox({ checked, onChange, title, size = 14 }: { checked: boo
   return <input type="checkbox" checked={checked} onChange={onChange} title={title} aria-label={title} style={{ width: size, height: size, accentColor: "#16a34a" }} className="shrink-0 cursor-pointer" />;
 }
 
-function flattenContacts(market: SponsorMarket) {
-  const rows: { prospect: SponsorProspect; contact: SponsorContact; index: number }[] = [];
-  let index = 0;
-  for (const prospect of market.prospects || []) {
-    for (const contact of prospect.contacts || []) rows.push({ prospect, contact, index: index++ });
-  }
-  return rows;
-}
-
 function CompactRow({
   market,
+  matchScope,
   status,
   contacted,
   hideContacted,
@@ -710,6 +852,7 @@ function CompactRow({
   onOpen,
 }: {
   market: SponsorMarket;
+  matchScope?: SearchScope;
   status: { contacted: number; total: number };
   contacted: Set<string>;
   hideContacted: boolean;
@@ -723,7 +866,9 @@ function CompactRow({
   onCopy: (text: string, label: string) => void;
   onOpen: (url?: string) => void;
 }) {
-  const rows = flattenContacts(market).filter(({ prospect, contact, index }) => !hideContacted || !contacted.has(contactKey(market.id, prospect, contact, index)));
+  const rows = flattenContacts(market, matchScope).filter(({ prospect, contact, index }) => !hideContacted || !contacted.has(contactKey(market.id, prospect, contact, index)));
+  const shownProspects = visibleProspectCount(market, matchScope);
+  const scoped = scopeIsFiltering(matchScope);
   return (
     <div className="sp-row px-3 py-1.5 bg-white dark:bg-zinc-900">
       <div className="flex items-center gap-2 min-w-0">
@@ -736,7 +881,7 @@ function CompactRow({
           <ExternalLink className="h-3 w-3 opacity-50 shrink-0" />
         </button>
         <span className="text-[11px] text-zinc-400 shrink-0">{market.region_type} / {market.region}</span>
-        <span className="text-[10px] text-zinc-400 shrink-0">{prospectCount(market)} prospects</span>
+        <span className="text-[10px] text-zinc-400 shrink-0">{scoped ? `${shownProspects}/${prospectCount(market)} matched` : `${prospectCount(market)} prospects`}</span>
         <span className="text-[10px] text-zinc-400 shrink-0">{status.contacted}/{status.total}</span>
       </div>
       {expanded && (rows.length > 0 ? (
@@ -765,7 +910,7 @@ function CompactRow({
           })}
         </div>
       ) : (
-        <div className="pl-8 mt-0.5 text-xs text-zinc-400">No contacts yet. Use the search link or swarm workflow to populate sponsor leads.</div>
+        <div className="pl-8 mt-0.5 text-xs text-zinc-400">{scoped ? "No matching contacts for this search." : "No contacts yet. Use the search link or swarm workflow to populate sponsor leads."}</div>
       ))}
     </div>
   );
@@ -944,6 +1089,7 @@ function ContactChip({
 
 function MarketCard({
   market,
+  matchScope,
   status,
   contacted,
   hideContacted,
@@ -958,6 +1104,7 @@ function MarketCard({
   onOpen,
 }: {
   market: SponsorMarket;
+  matchScope?: SearchScope;
   status: { contacted: number; total: number };
   contacted: Set<string>;
   hideContacted: boolean;
@@ -971,7 +1118,9 @@ function MarketCard({
   onCopy: (text: string, label: string) => void;
   onOpen: (url?: string) => void;
 }) {
-  const prospects = expanded ? market.prospects || [] : [];
+  const scoped = scopeIsFiltering(matchScope);
+  const prospects = expanded ? (market.prospects || []).filter((prospect) => shouldShowProspect(prospect, matchScope)) : [];
+  const shownProspects = visibleProspectCount(market, matchScope);
   return (
     <div className="sp-row border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-white dark:bg-zinc-900 overflow-visible">
       <div className="px-5 py-4 flex flex-col md:flex-row md:items-center gap-3 border-b border-zinc-100 dark:border-zinc-800">
@@ -985,7 +1134,7 @@ function MarketCard({
           <div className="text-xs text-zinc-500 mt-0.5 flex flex-wrap gap-x-3">
             <span>{market.region_type}</span>
             <span>{market.region}</span>
-            <span>{prospectCount(market)} prospects</span>
+            <span>{scoped ? `${shownProspects}/${prospectCount(market)} matched prospects` : `${prospectCount(market)} prospects`}</span>
           </div>
           <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-2 max-w-3xl leading-relaxed">{market.description}</p>
         </div>
@@ -1021,9 +1170,10 @@ function MarketCard({
                 </div>
               </div>
               <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
-                {(prospect.contacts || [])
-                  .filter((contact, index) => !hideContacted || !contacted.has(contactKey(market.id, prospect, contact, index)))
-                  .map((contact, index) => {
+                {flattenContacts(market, matchScope)
+                  .filter((row) => row.prospect === prospect)
+                  .filter(({ prospect, contact, index }) => !hideContacted || !contacted.has(contactKey(market.id, prospect, contact, index)))
+                  .map(({ contact, index }) => {
                     const key = contactKey(market.id, prospect, contact, index);
                     const on = contacted.has(key);
                     return (

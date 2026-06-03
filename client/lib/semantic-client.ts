@@ -4,6 +4,11 @@ const BASE =
 
 export type SponsorSemanticMatch = {
   id: string;
+  row_id?: string;
+  market_id?: string;
+  prospect_id?: string | null;
+  prospect_name?: string | null;
+  content_type?: string;
   name: string;
   region_type: string;
   country: string;
